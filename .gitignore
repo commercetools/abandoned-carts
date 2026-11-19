@@ -230,3 +230,5 @@ jest_0/
 
 # Local development
 .local/
+
+.connect/
