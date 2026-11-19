@@ -60,14 +60,17 @@ const serviceOrigin = (() => {
 const config = {
   name: 'Abandoned Carts',
   entryPointUriPath,
-  cloudIdentifier: '${env:CLOUD_IDENTIFIER}',
+  cloudIdentifier: process.env.CLOUD_IDENTIFIER || 'gcp-us',
   env: {
     development: {
-      initialProjectKey: '${env:INITIAL_PROJECT_KEY}',
+      initialProjectKey: process.env.INITIAL_PROJECT_KEY || '',
     },
     production: {
-      applicationId: '${env:CUSTOM_APPLICATION_ID}',
-      url: '${env:APPLICATION_URL}',
+      applicationId: process.env.CUSTOM_APPLICATION_ID || '',
+      // appkit rejects an empty URL when it builds. The fallback lets the build
+      // validate; on a deployment Connect sets APPLICATION_URL, and the start
+      // command's compile-html bakes that real value into the served page.
+      url: process.env.APPLICATION_URL || 'https://mc-app-placeholder.example.com',
     },
   },
   // The application's own data lives in Custom Objects: the rules a
@@ -88,7 +91,7 @@ const config = {
    * URL: not configured" while the deployment had it set all along.
    */
   additionalEnv: {
-    abandonedCartServiceUrl: '${env:ABANDONED_CART_SERVICE_URL}',
+    abandonedCartServiceUrl: process.env.ABANDONED_CART_SERVICE_URL || '',
   },
   headers: {
     csp: {
