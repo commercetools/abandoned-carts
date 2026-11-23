@@ -10,22 +10,16 @@ credentials or personal data.
 
 ## Before you open a PR
 
+Run the tests of the application you changed, from its own folder:
+
 ```bash
-./scripts/predeploy.sh
+npm ci && npm test
 ```
 
-Audit, typecheck, lint, build and unit tests for all five applications. One
-at a time with `./scripts/predeploy.sh mc-app`.
-
-`predeploy` must pass. It runs locally and is the one gate on this
-repository, so a change that passes it is a change the next person who clones
-can build.
-
-`npm audit` runs first because Connect's SCA scan is what rejects a
-Connector, and its report names only the stage that failed. It gates at
-**critical**, the threshold Connect enforces, and it keeps **development
-dependencies** in scope, because Connect scans those too — `--omit=dev`
-would go green here and still be rejected there.
+Each of the five applications (`service`, `job`, `order-created-event`,
+`mail-sender`, `mc-app`) installs and builds on its own, the way Connect builds
+it, so a change that passes there is a change the next person who clones can
+build.
 
 ## What a good change looks like here
 
