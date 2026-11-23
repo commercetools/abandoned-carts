@@ -47,9 +47,9 @@ knowing before it meets a Project with real shoppers in it.
   before anything is fetched, but on a Project that writes Custom Objects
   heavily, that is real traffic you pay for.
 - **`postDeploy` does not reliably run on a preview deployment**, and the
-  deployment report says "Post-deployment setup succeeded" either way. Run
-  `node scripts/connect.mjs ensure` after any deploy: it checks the
-  Subscriptions and the Type against the Project and repoints them. A redeploy
+  deployment report says "Post-deployment setup succeeded" either way. After
+  any deploy, check that the Subscriptions and the Type exist in the Project and
+  point at the current topic. A redeploy
   gets a new Pub/Sub topic, so a Subscription still aimed at the old one is as
   silent as no Subscription at all.
 

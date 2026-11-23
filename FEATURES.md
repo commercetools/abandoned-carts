@@ -180,15 +180,3 @@ system of record — there is no database.
   creates in the Merchant Center.
 - An order placed from a cart that was never recorded leaves nothing to mark.
   Conversion tracking measures carts this connector chased, not all carts.
-
-## Local gate
-
-`./scripts/predeploy.sh` runs what Connect runs, in Connect's order: install from
-the lockfile, `npm audit --audit-level=critical`, typecheck, lint, build, unit tests —
-36 tests across four applications. The audit is in there because Connect's SCA scan
-is what rejects a Connector and its report names only the stage that failed. The
-scan covers development dependencies as well as production ones, and fails on a
-critical finding, so the gate matches it on both.
-
-`scripts/connect.mjs` drives registration and deployment: `status`, `register`,
-`deploy`, `wire`, `logs`.

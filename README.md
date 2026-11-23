@@ -122,14 +122,6 @@ The scopes on the generated API Client are `manage_key_value_documents`,
 `manage_subscriptions` and `manage_types`. Nothing that can write a product
 or a price.
 
-`scripts/connect.mjs` reads three more of its own, none of which the
-deployed applications see:
-
-| Key | Required | Notes |
-| --- | --- | --- |
-| `CONNECT_CREATOR_NAME` / `CONNECT_CREATOR_EMAIL` | to `register` | Connect stores them on the draft as whoever registered it |
-| `CONNECT_REPO_URL` | no | The repository Connect clones. Your fork, if you have one |
-
 ## Deploying takes two passes
 
 Connect assigns each application its URL during the deployment, so two
@@ -172,36 +164,6 @@ The mail-sender's Subscription is a Change Subscription on
 Custom Object write in the Project reaches it. It is filtered in one
 comparison before anything is fetched, but in a Project that writes Custom
 Objects heavily this is real traffic.
-
-## Developing
-
-Everything fast enough to run before a deploy is behind one command:
-
-```bash
-./scripts/predeploy.sh
-```
-
-Audit, typecheck, lint, build and unit tests for all five applications. One
-at a time with `./scripts/predeploy.sh mc-app`.
-
-`npm audit` runs first because Connect's SCA scan is what rejects a
-Connector, and its report names only the stage that failed. It gates at
-**critical**, the threshold Connect enforces, and it keeps **development
-dependencies** in scope, because Connect scans those too — `--omit=dev`
-would go green here and still be rejected there.
-
-To exercise the mail-sender by hand, base64 a commercetools change message
-into the Pub/Sub envelope it receives:
-
-```bash
-curl -X POST http://localhost:8081/mailSender -H 'content-type: application/json' \
-  -d "{\"message\":{\"data\":\"$(printf '%s' '{"notificationType":"ResourceCreated","resource":{"typeId":"key-value-document"},"resourceUserProvidedIdentifiers":{"containerAndKey":{"container":"abandoned-carts","key":"CART_ID"}}}' | base64)\"}}"
-```
-
-## Registering and deploying
-
-`scripts/connect.mjs` drives it: `status`, `register`, `deploy`, `wire`,
-`ensure`, `logs`.
 
 ## What the deployment report does not tell you
 
